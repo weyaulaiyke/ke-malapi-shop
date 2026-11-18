@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>
+        <%= mode === 'setup' ? 'Seller Setup' : 'Seller Login' %>
+            | Ke. MALAPI
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+            <a href="/">Back to shop</a>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-panel" aria-labelledby="seller-title">
+            <p class="eyebrow">SELLER AREA</p>
+
+            <h1 id="seller-title">
+                <%= mode === 'setup' ? 'Make it yours.' : 'Welcome back.' %>
+            </h1>
+
+            <p class="auth-description">
+                <% if (mode === 'setup') { %>
+                    Set up your private seller account using your setup key. Choose your own email and shop password.
+                    <% } else { %>
+                        Log in to manage your pieces and your shop.
+                        <% } %>
+            </p>
+
+            <form id="seller-auth-form" class="auth-form" data-mode="<%= mode %>" action="/api/seller/<%= mode %>" method="post">
+                <% if (mode === 'setup') { %>
+                    <div class="form-field">
+                        <label for="seller-setup-key">Private setup key</label>
+                        <input id="seller-setup-key" name="setupKey" type="password" autocomplete="off" required>
+                    </div>
+                    <% } %>
+
+                        <div class="form-field">
+                            <label for="seller-email">Email address</label>
+                            <input id="seller-email" name="email" type="email" autocomplete="username" maxlength="254" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="seller-password">Password</label>
+
+                            <div class="password-field">
+                                <input id="seller-password" name="password" type="password" autocomplete="<%= mode === 'setup' ? 'new-password' : 'current-password' %>" <% if (mode==='setup' ) { %> minlength="12" pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9\s]).{12,}"
+                                aria-describedby="seller-password-help"
+                                <% } %>
+                                    required >
+
+                                    <button id="seller-password-toggle" class="password-toggle" type="button" aria-controls="seller-password" aria-pressed="false" aria-label="Show password">
+              Show
+            </button>
+                            </div>
+
+                            <% if (mode === 'setup') { %>
+                                <small id="seller-password-help">
+              Use at least 12 characters, one uppercase letter
+              and one special character. Use a new password
+              for this shop, not your email password.
+            </small>
+                                <% } %>
+                        </div>
+
+                        <button id="seller-auth-submit" class="button button-dark" type="submit">
+          <%= mode === 'setup' ? 'Create seller account' : 'Log in' %>
+        </button>
+            </form>
+
+            <p id="seller-auth-message" class="auth-message" role="status" aria-live="polite"></p>
+
+            <% if (mode === 'setup') { %>
+                <a class="auth-next" href="/seller/login">
+          Already set up? Log in
+        </a>
+                <% } %>
+        </section>
+    </main>
+
+    <script src="/seller-auth.js" defer></script>
+</body>
+
+</html>

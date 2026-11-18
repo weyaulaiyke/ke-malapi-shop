@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Your Cart | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+            <a href="/shop">Continue shopping</a>
+        </div>
+    </header>
+
+    <main class="bag-page">
+        <div class="container">
+            <p class="eyebrow">YOUR HANDMADE FINDS</p>
+            <h1>Your cart</h1>
+
+            <p id="bag-message" class="auth-message" role="status" aria-live="polite"></p>
+
+            <% if (bagError) { %>
+                <p role="alert">
+                    We couldn’t load your cart. Please try again shortly.
+                </p>
+
+                <% } else if (items.length === 0) { %>
+                    <div class="bag-empty">
+                        <p>Your cart is waiting for something lovely.</p>
+
+                        <a class="button button-dark" href="/shop">
+            Explore the collection
+          </a>
+                    </div>
+
+                    <% } else { %>
+                        <div class="cart-layout">
+                            <div class="bag-list">
+                                <% items.forEach((item) => { %>
+                                    <% const product = item.productSize.product; %>
+
+                                        <article class="bag-item">
+                                            <% if (product.image_url) { %>
+                                                <img class="bag-item-image" src="<%= product.image_url %>" alt="<%= product.name %>" width="160" height="200" loading="lazy">
+                                                <% } else { %>
+                                                    <div class="bag-item-placeholder">
+                                                        Photo coming soon
+                                                    </div>
+                                                    <% } %>
+
+                                                        <div class="bag-item-details">
+                                                            <h2>
+                                                                <%= product.name %>
+                                                            </h2>
+
+                                                            <p>Size:
+                                                                <%= item.productSize.size %>
+                                                            </p>
+
+                                                            <div class="bag-quantity">
+                                                                <label for="quantity-<%= item.id %>">
+                      Quantity
+                    </label>
+
+                                                                <select id="quantity-<%= item.id %>" class="bag-quantity-select" data-item-id="<%= item.id %>">
+                      <% for (let quantity = 1; quantity <= 10; quantity++) { %>
+                        <option
+                          value="<%= quantity %>"
+                          <% if (quantity === item.quantity) { %>selected<% } %>
+                        >
+                          <%= quantity %>
+                        </option>
+                      <% } %>
+                    </select>
+                                                            </div>
+
+                                                            <p>
+                                                                Price per piece:
+                                                                <%= formatMoney(product.price) %>
+                                                            </p>
+
+                                                            <p class="cart-line-total">
+                                                                Item total:
+                                                                <%= formatMoney(item.lineTotal) %>
+                                                            </p>
+
+                                                            <% if (product.is_available) { %>
+                                                                <a class="bag-product-link" href="/shop/products/<%= product.id %>">
+                      View piece
+                    </a>
+                                                                <% } else { %>
+                                                                    <p class="bag-unavailable">
+                                                                        This piece is no longer available.
+                                                                    </p>
+                                                                    <% } %>
+
+                                                                        <button class="bag-remove" type="button" data-item-id="<%= item.id %>" aria-label="Remove <%= product.name %>, size <%= item.productSize.size %> from your cart">
+                    Remove
+                  </button>
+                                                        </div>
+                                        </article>
+                                        <% }); %>
+                            </div>
+
+                            <aside class="cart-summary" aria-labelledby="cart-summary-title">
+                                <h2 id="cart-summary-title">Cart summary</h2>
+
+                                <div class="cart-summary-row">
+                                    <span>Subtotal</span>
+                                    <strong><%= formatMoney(subtotal) %></strong>
+                                </div>
+
+                                <p class="cart-summary-note">
+                                    Delivery fees will be calculated at checkout.
+                                </p>
+
+                                <% if (hasUnavailableItems) { %>
+                                    <p class="bag-unavailable">
+                                        Remove unavailable pieces to continue. They are excluded from your subtotal.
+                                    </p>
+
+                                    <button class="button button-dark cart-checkout" type="button" disabled>
+                Proceed to checkout </button>
+                                    <% } else { %>
+                                        <a class="button button-dark cart-checkout" href="/checkout">
+                Proceed to checkout
+              </a>
+                                        <% } %>
+                            </aside>
+                        </div>
+                        <% } %>
+        </div>
+    </main>
+
+    <script src="/bag.js" defer></script>
+</body>
+
+</html>

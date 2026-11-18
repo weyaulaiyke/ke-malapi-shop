@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Collection | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<script src="/store.js" defer></script>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+
+            <div class="store-account">
+                <span>Hi, <%= customer.name %></span>
+                <a href="/cart">Cart</a>
+
+                <button id="logout-button" class="button button-outline" type="button">
+              Log out
+            </button>
+            </div>
+        </div>
+    </header>
+
+    <p id="logout-message" class="container auth-message" role="status"></p>
+
+    <main class="store-page">
+        <div class="container">
+            <p class="eyebrow">WELCOME,
+                <%= customer.name %>
+            </p>
+            <h1>The collection</h1>
+            <p class="store-intro">Find a little handmade something for you.</p>
+
+            <% if (collectionError) { %>
+                <p role="alert">
+                    We couldn’t load the collection. Please try again shortly.
+                </p>
+                <% } else if (products.length === 0) { %>
+                    <p>New pieces are on their way. Check back soon.</p>
+                    <% } else { %>
+                        <div class="product-grid">
+                            <% products.forEach((product) => { %>
+                                <article class="product-card">
+                                    <a class="product-card-link" href="/shop/products/<%= product.id %>">
+                                        <% if (product.image_url) { %>
+                                            <img class="product-image" src="<%= product.image_url %>" alt="<%= product.name %>" width="400" height="540" loading="lazy">
+                                            <% } else { %>
+                                                <div class="product-placeholder">
+                                                    <span>Photo coming soon</span>
+                                                </div>
+                                                <% } %>
+
+                                                    <div class="product-caption">
+                                                        <h3>
+                                                            <%= product.name %>
+                                                        </h3>
+                                                        <p class="product-price">
+                                                            <%= formatMoney(product.price) %>
+                                                        </p>
+                                                    </div>
+                                    </a>
+                                </article>
+                                <% }); %>
+                        </div>
+                        <% } %>
+        </div>
+    </main>
+</body>
+
+</html>

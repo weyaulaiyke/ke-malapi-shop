@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+            <a href="/bag">Back to cart</a>
+        </div>
+    </header>
+
+    <main class="checkout-page">
+        <div class="container">
+            <p class="eyebrow">ALMOST YOURS</p>
+            <h1>Checkout</h1>
+
+            <div class="checkout-layout">
+                <div>
+                    <section class="checkout-section">
+                        <h2>Contact details</h2>
+
+                        <p>
+                            <%= customer.name %>
+                        </p>
+                        <p>
+                            <%= customer.email %>
+                        </p>
+
+                        <p class="checkout-note">
+                            Your order confirmation will be sent to this email.
+                        </p>
+                    </section>
+
+                    <form id="checkout-form" class="checkout-section">
+                        <h2>Delivery details</h2>
+
+                        <div class="checkout-fields">
+                            <div class="form-field">
+                                <label for="recipient-name">Recipient’s full name</label>
+                                <input id="recipient-name" name="recipientName" type="text" autocomplete="shipping name" value="<%= customer.name %>" maxlength="150" required>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="delivery-phone">Phone number</label>
+                                <input id="delivery-phone" name="phone" type="tel" autocomplete="shipping tel" maxlength="30" required>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="address-line-one">Street address</label>
+                                <input id="address-line-one" name="addressLine1" type="text" autocomplete="shipping address-line1" maxlength="200" required>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="address-line-two">
+                  Apartment, building or suburb (optional)
+                </label>
+                                <input id="address-line-two" name="addressLine2" type="text" autocomplete="shipping address-line2" maxlength="200">
+                            </div>
+
+                            <div class="checkout-field-row">
+                                <div class="form-field">
+                                    <label for="delivery-city">City or town</label>
+                                    <input id="delivery-city" name="city" type="text" autocomplete="shipping address-level2" maxlength="100" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="delivery-postal-code">Postal code</label>
+                                    <input id="delivery-postal-code" name="postalCode" type="text" inputmode="numeric" autocomplete="shipping postal-code" pattern="[0-9]{4}" maxlength="4" required>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="delivery-province">Province</label>
+                                <select id="delivery-province" name="province" autocomplete="shipping address-level1" required>
+                  <option value="">Select a province</option>
+                  <option>Eastern Cape</option>
+                  <option>Free State</option>
+                  <option>Gauteng</option>
+                  <option>KwaZulu-Natal</option>
+                  <option>Limpopo</option>
+                  <option>Mpumalanga</option>
+                  <option>North West</option>
+                  <option>Northern Cape</option>
+                  <option>Western Cape</option>
+                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="delivery-country">Country</label>
+                                <select id="delivery-country" name="country" autocomplete="shipping country" required>
+                  <option value="ZA">South Africa</option>
+                </select>
+                            </div>
+                        </div>
+
+                        <fieldset class="checkout-payment">
+                            <legend>Payment method</legend>
+
+                            <label class="payment-option">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="PAY_ON_DELIVERY"
+                  checked
+                >
+                <span>Pay on delivery</span>
+              </label>
+
+                            <label class="payment-option">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="PAY_NOW"
+                  disabled
+                >
+                <span>Pay now — coming soon</span>
+              </label>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <aside class="cart-summary" aria-labelledby="checkout-summary-title">
+                    <h2 id="checkout-summary-title">Order summary</h2>
+
+                    <ul class="checkout-items">
+                        <% items.forEach((item) => { %>
+                            <li>
+                                <div>
+                                    <strong><%= item.productSize.product.name %></strong>
+                                    <p>
+                                        Size:
+                                        <%= item.productSize.size %>
+                                            · Qty:
+                                            <%= item.quantity %>
+                                    </p>
+                                </div>
+
+                                <span><%= formatMoney(item.lineTotal) %></span>
+                            </li>
+                            <% }); %>
+                    </ul>
+
+                    <div class="cart-summary-row">
+                        <span>Subtotal</span>
+                        <strong><%= formatMoney(subtotal) %></strong>
+                    </div>
+
+                    <div class="cart-summary-row">
+                        <span>Delivery</span>
+                        <span>Not calculated yet</span>
+                    </div>
+
+                    <p class="cart-summary-note">
+                        Your final total will include the delivery fee.
+                    </p>
+
+                    <button class="button button-dark cart-checkout" type="submit" form="checkout-form" disabled>
+            Place order
+          </button>
+
+                    <small>Ordering is being connected. No order will be placed yet.</small>
+                </aside>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

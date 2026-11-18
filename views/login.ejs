@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Log in | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+            <a href="/">Back to home</a>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-panel" aria-labelledby="login-title">
+            <p class="eyebrow">COME ON IN</p>
+            <h1 id="login-title">Welcome back.</h1>
+
+            <p class="auth-description">
+                Log in to explore the full collection and find your next piece.
+            </p>
+
+            <form id="login-form" class="auth-form" action="/api/customers/login" method="post">
+                <div class="form-field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" autocomplete="username" maxlength="254" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                </div>
+
+                <button class="button button-dark" type="submit">
+          Log in
+        </button>
+            </form>
+
+            <p id="login-message" class="auth-message" role="status" aria-live="polite"></p>
+
+            <a class="auth-next" href="/signup">
+        New here? Create an account
+      </a>
+        </section>
+    </main>
+
+    <script src="/login.js" defer></script>
+</body>
+
+</html>

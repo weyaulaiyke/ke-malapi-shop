@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= product.name %> | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">Ke. MALAPI</a>
+            <nav class="store-account" aria-label="Shopping navigation">
+                <a href="/shop">Back to collection</a>
+                <a href="/cart">Cart</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="product-page">
+        <div class="container product-detail">
+            <div class="product-detail-visual">
+                <% if (product.image_url) { %>
+                    <img class="product-detail-image" src="<%= product.image_url %>" alt="<%= product.name %>" width="800" height="1000">
+                    <% } else { %>
+                        <div class="product-detail-placeholder">
+                            Photo coming soon
+                        </div>
+                        <% } %>
+            </div>
+
+            <div class="product-detail-copy">
+                <p class="eyebrow">
+                    <%= product.category %>
+                </p>
+
+                <h1>
+                    <%= product.name %>
+                </h1>
+
+                <p class="product-detail-price">
+                    <%= formatMoney(product.price) %>
+                </p>
+
+                <% if (product.description) { %>
+                    <p class="product-description">
+                        <%= product.description %>
+                    </p>
+                    <% } %>
+
+                        <div class="product-options">
+                            <% if (product.sizes.length > 0) { %>
+                                <label for="product-size">Choose your size</label>
+
+                                <select id="product-size" name="size" required>
+              <option value="">Select a size</option>
+
+              <% product.sizes.forEach((option) => { %>
+                <option value="<%= option.id %>">
+                  <%= option.size %>
+                </option>
+              <% }); %>
+            </select>
+                                <% } else { %>
+                                    <p>Size options haven’t been added for this piece yet.</p>
+                                    <% } %>
+
+                                        <button id="add-to-cart" class="button button-dark" type="button" <% if (product.sizes.length===0 ) { %>disabled<% } %>
+                                  >
+                                    Add to cart
+                                  </button>
+
+                                        <p id="cart-status" class="auth-message" role="status" aria-live="polite"></p>
+
+                                        <small id="cart-status">
+            Cart purchases will be available once checkout is connected.
+          </small>
+                        </div>
+            </div>
+        </div>
+    </main>
+    <script src="/product.js" defer></script>
+</body>
+
+</html>
