@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Add a Piece | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body class="seller-create-page">
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/" aria-label="Ke. MALAPI home">
+                <img class="brand-logo" src="/images/logo.jpg" alt="Ke. MALAPI">
+            </a>
+            <a href="/seller">Back to dashboard</a>
+        </div>
+    </header>
+
+    <main class="seller-page">
+        <div class="container seller-product-container">
+            <p class="eyebrow">SOMETHING NEW, MADE BY YOU</p>
+            <h1>Add a piece</h1>
+
+            <p class="seller-intro">
+                Add the details and photo customers will see in your shop.
+            </p>
+
+            <form id="product-form" class="auth-form seller-product-form" action="/api/seller/products" method="post" enctype="multipart/form-data">
+                <div class="form-field">
+                    <label for="product-name">Piece name</label>
+                    <input id="product-name" name="name" type="text" maxlength="150" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" name="description" rows="5" maxlength="5000" placeholder="Describe the fit, materials and details."></textarea>
+                </div>
+
+                <div class="checkout-field-row">
+                    <div class="form-field">
+                        <label for="product-price">Price (ZAR)</label>
+                        <input id="product-price" name="price" type="number" min="0.01" max="9999999999.99" step="0.01" inputmode="decimal" placeholder="250.00" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="product-category">Category</label>
+                        <select id="product-category" name="category" required>
+              <option value="">Choose a category</option>
+              <option value="Tops">Tops</option>
+              <option value="Dresses">Dresses</option>
+              <option value="Bottoms">Bottoms</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="product-sizes">Available sizes</label>
+                    <input id="product-sizes" name="sizes" type="text" maxlength="620" placeholder="XS, S, M, L, XL" aria-describedby="product-sizes-help" required>
+                    <small id="product-sizes-help">
+            Separate sizes with commas. For accessories, you can enter
+            “One size”. Add up to 20 sizes.
+          </small>
+                </div>
+
+                <div class="form-field">
+                    <label for="product-photo">Main photo</label>
+                    <input id="product-photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="product-photo-help" required>
+                    <small id="product-photo-help">
+            Choose one JPG, PNG or WebP photo, up to 8 MB.
+          </small>
+                </div>
+
+                <label class="seller-feature-option" for="product-featured">
+          <input
+            id="product-featured"
+            name="isFeatured"
+            type="checkbox"
+            value="true"
+          >
+          <span>Feature this piece on the public homepage</span>
+        </label>
+
+                <small class="seller-form-note">
+          The homepage displays up to four of the newest available
+          featured pieces. All available pieces appear in the
+          signed-in collection.
+        </small>
+
+                <button id="product-submit" class="button button-dark" type="submit">
+          Publish piece
+        </button>
+            </form>
+
+            <p id="product-form-message" class="auth-message" role="status" aria-live="polite"></p>
+        </div>
+    </main>
+
+    <script src="/seller-product-new.js" defer></script>
+
+</body>
+
+</html>

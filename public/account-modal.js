@@ -58,9 +58,13 @@ function setMode(nextMode) {
     message.removeAttribute('data-state');
 }
 
-document.querySelector('#open-account').addEventListener('click', () => {
-    dialog.showModal();
-});
+const openAccountButton = document.querySelector('#open-account');
+
+if (openAccountButton) {
+    openAccountButton.addEventListener('click', () => {
+        dialog.showModal();
+    });
+}
 
 document.querySelector('#close-account').addEventListener('click', () => {
     dialog.close();

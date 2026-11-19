@@ -8,6 +8,7 @@ const bagRoutes = require('./routes/bag');
 const formatMoney = require('./utils/money');
 const { Prisma } = require('@prisma/client');
 const sellerAuthRoutes = require('./routes/seller-auth');
+const requireSeller = require('./middleware/require-seller');
 
 const app = express();
 
@@ -20,6 +21,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(sessionMiddleware);
+app.use((req, res, next) => {
+    res.locals.isSeller = Boolean(req.session.sellerId);
+    res.locals.isCustomer = Boolean(req.session.customerId);
+    next();
+});
 app.use('/api/seller', sellerAuthRoutes);
 app.use('/api/bag', bagRoutes);
 
@@ -388,44 +394,75 @@ app.get(
     }
 );
 
-app.get('/seller/setup', async (req, res) => {
+app.get('/seller/setup', async(req, res) => {
     try {
-      const seller = await prisma.seller.findUnique({
-        where: {
-          accountKey: 'owner'
-        },
-        select: {
-          id: true
+        const seller = await prisma.seller.findUnique({
+            where: {
+                accountKey: 'owner'
+            },
+            select: {
+                id: true
+            }
+        });
+
+        if (seller) {
+            return res.redirect('/seller/login');
         }
-      });
-  
-      if (seller) {
-        return res.redirect('/seller/login');
-      }
-  
-      if (!process.env.SELLER_SETUP_KEY) {
-        return res.status(503).send(
-          'Seller setup is not enabled. Please contact the site developer.'
-        );
-      }
-  
-      return res.render('seller-auth', {
-        mode: 'setup'
-      });
+
+        if (!process.env.SELLER_SETUP_KEY) {
+            return res.status(503).send(
+                'Seller setup is not enabled. Please contact the site developer.'
+            );
+        }
+
+        return res.render('seller-auth', {
+            mode: 'setup'
+        });
     } catch (error) {
-      console.error('Seller setup page failed:', error.message);
-  
-      return res.status(500).send(
-        'Unable to load seller setup. Please try again shortly.'
-      );
+        console.error('Seller setup page failed:', error.message);
+
+        return res.status(500).send(
+            'Unable to load seller setup. Please try again shortly.'
+        );
     }
-  });
-  
-  app.get('/seller/login', (req, res) => {
+});
+
+app.get('/seller/login', (req, res) => {
     res.render('seller-auth', {
-      mode: 'login'
+        mode: 'login'
     });
-  });
+});
+
+app.get('/seller', requireSeller, async(req, res) => {
+    try {
+        const products = await prisma.products.findMany({
+            include: {
+                sizes: true
+            },
+            orderBy: [
+                { created_at: 'desc' },
+                { id: 'desc' }
+            ]
+        });
+
+        res.render('seller-dashboard', {
+            seller: req.seller,
+            products
+        });
+    } catch (error) {
+        console.error('Seller dashboard failed:', error.message);
+
+        res.status(500).send(
+            'Unable to load your dashboard. Please try again shortly.'
+        );
+    }
+});
+
+app.get('/seller/products/new', requireSeller, (req, res) => {
+    res.render('seller-product-new', {
+        seller: req.seller
+    });
+});
 
 app.listen(port, () => {
     console.log(`Open http://localhost:${port}`);

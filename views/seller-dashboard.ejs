@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Seller Dashboard | Ke. MALAPI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <img class="brand-logo" src="/images/logo.jpg" alt="Ke. MALAPI">
+
+            <nav class="store-account" aria-label="Seller navigation">
+                <a href="/">View storefront</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="seller-page">
+        <div class="container">
+            <p class="eyebrow">YOUR SHOP, YOUR SPACE</p>
+            <h1>Seller dashboard</h1>
+            <p class="seller-intro">
+                Signed in as
+                <%= seller.email %>
+            </p>
+            <a class="button button-dark seller-add-button" href="/seller/products/new">
+                Add a piece
+              </a>
+
+            <section class="seller-overview" aria-label="Product overview">
+                <div class="seller-stat">
+                    <span>Total pieces</span>
+                    <strong><%= products.length %></strong>
+                </div>
+
+                <div class="seller-stat">
+                    <span>Available</span>
+                    <strong>
+            <%= products.filter((product) => product.is_available).length %>
+          </strong>
+                </div>
+
+                <div class="seller-stat">
+                    <span>Featured on homepage</span>
+                    <strong>
+            <%= products.filter((product) =>
+              product.is_featured && product.is_available
+            ).length %>
+          </strong>
+                </div>
+            </section>
+
+            <section class="seller-products" aria-labelledby="seller-products-title">
+                <h2 id="seller-products-title">Your pieces</h2>
+
+                <% if (products.length === 0) { %>
+                    <div class="seller-empty">
+                        <p>Your collection starts here.</p>
+                        <p>
+                            Once you add your pieces, you’ll be able to manage their photos, prices, sizes and availability here.
+                        </p>
+                    </div>
+                    <% } else { %>
+                        <div class="product-grid">
+                            <% products.forEach((product) => { %>
+                                <article class="product-card">
+                                    <% if (product.image_url) { %>
+                                        <img class="product-image" src="<%= product.image_url %>" alt="<%= product.name %>" width="400" height="540" loading="lazy">
+                                        <% } else { %>
+                                            <div class="product-placeholder">
+                                                <span>No photo added</span>
+                                            </div>
+                                            <% } %>
+
+                                                <div class="product-caption">
+                                                    <h3>
+                                                        <%= product.name %>
+                                                    </h3>
+                                                    <p class="product-price">
+                                                        <%= formatMoney(product.price) %>
+                                                    </p>
+                                                </div>
+
+                                                <p class="seller-product-meta">
+                                                    <%= product.category %>
+                                                        ·
+                                                        <%= product.is_available ? 'Available' : 'Unavailable' %>
+                                                </p>
+
+                                                <% if (product.is_featured) { %>
+                                                    <p class="seller-product-meta">Marked as featured</p>
+                                                    <% } %>
+
+                                                        <p class="seller-product-meta">
+                                                            Sizes:
+                                                            <%= product.sizes.length
+                    ? product.sizes.map((option) => option.size).join(', ')
+                    : 'None added'
+                  %>
+                                                        </p>
+                                </article>
+                                <% }); %>
+                        </div>
+                        <% } %>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>
